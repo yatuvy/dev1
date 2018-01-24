@@ -1,0 +1,24 @@
+doctype html
+// When the Angular script is loaded, it looks for the ng-app attribute in the DOM and if it finds it, it hook itself into the application.
+html(ng-app='wonderflow')
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-resource.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-route.js')
+    script(src='/libs/markdown.js')
+    script(src='/javascripts/httpHelper.js')
+    script(src='/javascripts/wonderflow.js')
+    script(src='/javascripts/loginControllers.js')
+    script(src='/javascripts/flowControllers.js')
+    script(src='/javascripts/flowMetadataProcessors.js')
+    script(src='/javascripts/wizardLogic.js')
+
+    meta(name='google-signin-client_id', content='487403366110-a8pdjnhfpb2d76o7e7a9f3koa8vkqavm.apps.googleusercontent.com')
+    script(async, defer, src='https://apis.google.com/js/platform.js')
+
+  body
+    block content

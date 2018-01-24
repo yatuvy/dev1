@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  //- div with attribute ng-view.
+  //- This attribute tells Angular where to render views.
+  //- The first time the user hits the home page, the Jade view will be rendered
+  //- on the server and returned to the client. In a real-world application,
+  //- this view will have the basic template for the site
+  //- (e.g., navigation bars, logos, etc.).
+  //- It will have a content area (indicated by ng-view) to render views.
+  //- As the user navigates through the application, Angular will replace
+  //- the content area with a different Angular view.
+  //- This prevents a full-page reload and results in better performance.
+  div(ng-view)

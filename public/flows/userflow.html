@@ -1,0 +1,47 @@
+<p>
+  <h4>Path: {{wizardState.itemPath}}</h4>
+</p>
+
+<p>
+  <h2><label>itemProgress</label></h2>
+  <div id="item-progress-div">
+    <table class="components-table">
+      <tr h-recursive ng-repeat="(key, value) in wizardState.itemProgress">
+        <td ng-click="elementClicked(this)">{{key}}</td>
+        <td>
+        </td>
+        <td ng-if="!isObject(value)">{{value}}</td>
+        <td ng-if="isObject(value)">
+          <span ng-if="isArray(value)">
+            <table border="1">
+              <tr ng-repeat="item in value">
+                <td ng-click="itemProgressElementItemClicked(this)">{{$index}}</td>
+                <td ng-if="isObject(item)">
+                  <table border="1">
+                    <tr h-recursive ng-repeat="(key, value) in item"></tr>
+                  </table>
+                </td>
+                <td ng-if="!isObject(item)">{{item}}</td>
+              </tr>
+            </table>
+          </span>
+          <span ng-if="!isArray(value)">
+            <table border="1">
+              <tr h-recursive ng-repeat="(key, value) in value"></tr>
+            </table>
+          </span>
+        </td>
+      </tr>
+    </table>
+
+    <p>
+      <button class="btn btn-info btn-xs" ng-click="generateMarkdown()">Generate Markdown</button>
+      <div ng-show="wizardState.itemProgressMarkdown" id="item-progress-markdown-div" class="form-group">
+        <textarea class="markdown-textarea" ng-model="wizardState.itemProgressMarkdown" id="item-progress-markdown-textarea"></textarea>
+        <button class="btn btn-info btn-xs" ng-click="generateMarkdownHtml()">Generate Html</button>
+        <div id="markdownPreview"> </div>
+      </div>
+    </p>
+
+  </div>
+</p>
