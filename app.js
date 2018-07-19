@@ -1,20 +1,18 @@
 #!/usr/bin/env node
-
 /* app.js is the entry point to the application.
 It’s where the application is defined and configured. */
-
 var express = require('express');
 var app = express();
 
-var logUtils = require('./utils/loggerHelper');
-logUtils.initiateLogger(app); // (loggerHelper.js)
-
-var console = process.console;
+var loggerHelper = require('./utils/loggerHelper');
+loggerHelper.initiateLogger(app); // (loggerHelper.js)
 var tagJson = {msg : 'APP', colors : ['green', 'inverse']};
-console.tag(tagJson).time().file().log("App Start Up");
+function logger(tagJson) {return process.console.tag(tagJson).time().file()};
+logger(tagJson).log("App Start Up");
 
 // Load Global Properties
 require('./globalProperties');
+logger(tagJson).log(loggerHelper.createLogMessage('Validation Properties: ', validationProperties));
 
 // Put DB util on process so it can be used from any script
 var dbHelper = require('./utils/dbHelper');
@@ -25,25 +23,17 @@ initiateApp(app);
 var routeSources = {
   "routes" : [
     {"route":'./routes/index', "path":'/'},
-    {"route":'./routes/documents', "path":'/api/documents'},
-    {"route":'./routes/management', "path":'/api/management'}
+    {"route":'./routes/flows', "path":'/api/flows'},
+    {"route":'./routes/documents', "path":'/api/documents'}
   ]
 } 
 // Routes:
 setRoutes(app, routeSources);
 
-// catch 404 and forward to error handler
-/*app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});*/
-
-// error handlers
-
 // development error handler. will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
+    logger(tagJson).error(err);
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -54,6 +44,9 @@ if (app.get('env') === 'development') {
 
 // production error handler. no stacktraces leaked to user
 app.use(function(err, req, res, next) {
+
+  logger(tagJson).log("App Err: " + JSON.stringify(err));
+
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
@@ -71,10 +64,6 @@ function initiateApp(app){
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'jade');
 
-  var favicon = require('serve-favicon');
-  // uncomment after placing your favicon in /public
-  //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-
   var bodyParser = require('body-parser');
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -85,8 +74,8 @@ function initiateApp(app){
 
   initiateClientSession(app);
 
-  process.on('uncaughtException', (err) => {
-    console.tag(tagJson).time().file().log("Uncaught Exception: " + err + "\n" + err.stack);  //console.tag(tagJson).time().file().log("Stack: " + err.stack);    //throw err;
+  process.on('uncaughtException', function (err) {
+    logger(tagJson).log("Uncaught Exception: " + err + "\n" + err.stack);
   });
 }
 
@@ -105,7 +94,7 @@ function initiateClientSession(app){
         expires: 30 * 60 * 1000
     }
   };
-  console.tag(tagJson).time().file().log('initiateClientSession(app) Session Properies:\n\t'+
+  logger(tagJson).log('initiateClientSession(app) Session Properies:\n\t'+
     JSON.stringify(sessionProperies));
   sessionProperies.secret = 'djvr83sia02kd0wq2';
   app.use(session(sessionProperies));
@@ -124,6 +113,5 @@ function setRoutes(app, routeSources){
     var required = require(route);
     app.use(path, required);
   };
-  console.tag(tagJson).time().file().log(logMessage);
+  logger(tagJson).log(logMessage);
 }
-

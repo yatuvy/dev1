@@ -1,16 +1,20 @@
 <p>
-  <h4>Path: {{wizardState.itemPath}}</h4>
+  <span ng-if="wizardState.FlowProgress.name">
+    <h3><font color="blue">{{wizardState.FlowProgress.name}}</font></h3>
+  </span>
 </p>
 
 <p>
-  <h2><label>itemProgress</label></h2>
-  <div id="item-progress-div">
+  <h2><label>itemProgress</label>
+  </h2>
+  <div ng-if="isShowElement('item-progress-div')" id="item-progress-div">
     <table class="components-table">
       <tr h-recursive ng-repeat="(key, value) in wizardState.itemProgress">
         <td ng-click="elementClicked(this)">{{key}}</td>
-        <td>
+        <td ng-if="!isObject(value)">
+          <span ng-if="isUpperElement(key)">{{value}}</span>
+          <span ng-if="!isUpperElement(key)">{{prepareLowerElementValue(value)}}</span>        
         </td>
-        <td ng-if="!isObject(value)">{{value}}</td>
         <td ng-if="isObject(value)">
           <span ng-if="isArray(value)">
             <table border="1">
@@ -33,7 +37,6 @@
         </td>
       </tr>
     </table>
-
     <p>
       <button class="btn btn-info btn-xs" ng-click="generateMarkdown()">Generate Markdown</button>
       <div ng-show="wizardState.itemProgressMarkdown" id="item-progress-markdown-div" class="form-group">
@@ -42,6 +45,44 @@
         <div id="markdownPreview"> </div>
       </div>
     </p>
+  </div>
+</p>
+
+<p>
+  <h2><label>Flow Progress</label>
+  </h2>
+  <div ng-show="isShowElement('flow-progress-div')" id="flow-progress-div">
+    <table class="components-table">
+      <tr h-recursive ng-repeat="(key, value) in wizardState.FlowProgress">
+        <td ng-click="elementClicked(this)">{{key}}</td>
+        <td ng-if="!isObject(value)">{{value}}</td>
+        <td ng-if="isObject(value)">
+          <span ng-if="isArray(value)">
+            <table border="1">
+              <tr ng-repeat="item in value">
+                <td ng-click="flowProgressElementItemClicked(this)">{{$index}}</td>
+                <td ng-if="isObject(item)">
+                  <table border="1">
+                    <tr h-recursive ng-repeat="(key, value) in item"></tr>
+                  </table>
+                </td>
+                <td ng-if="!isObject(item)">{{item}}</td>
+              </tr>
+            </table>
+          </span>
+          <span ng-if="!isArray(value)">
+
+            <div ng-if="!isDocument(value)">
+              <table border="1">
+                <tr h-recursive ng-repeat="(key, value) in value"></tr>
+              </table>
+            </div>
+          </span>
+        </td>
+      </tr>
+    </table>
 
   </div>
 </p>
+
+<p>userflow.html</p>

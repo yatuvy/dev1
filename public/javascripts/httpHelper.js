@@ -9,15 +9,16 @@ function sendApiRequest(scope, apiName, apiMethod, parameters, method, contentTy
         urlPath += parameters;
     }
     var searchObject = scope.location.search();
-    console.log("httpHelper.js getFlowsRequest() " + method + " " + urlPath +
-      "\n\tsearch: " + JSON.stringify(searchObject));
+    console.log("\nhttpHelper.js getFlowsRequest() " + method + " " + urlPath +
+      "\n\tsearch: " + JSON.stringify(searchObject) +
+      "\n\tdata: " + JSON.stringify(data));
     var req = {
         method: method,
         url: urlPath,
         headers: {
             'Content-Type': contentType
         }
-    }
+    };
     if (data != null) {
         req.data = data;
     }
@@ -26,7 +27,7 @@ function sendApiRequest(scope, apiName, apiMethod, parameters, method, contentTy
             successCallback(response);
         }
         else{
-            failureCallback(response);
+            failureCallback(response.Error == null ? response.data : response.Error);
         }
     }, failureCallback);
 }
@@ -34,3 +35,8 @@ function sendApiRequest(scope, apiName, apiMethod, parameters, method, contentTy
 function sendPostRequest(scope, apiName, apiMethod, contentType, data, successCallback, failureCallback) {
     sendApiRequest(scope, apiName, apiMethod, null, 'POST', contentType, data, successCallback, failureCallback);
 }
+
+function handlePageData(data, loginNext, handleData){
+  handleData(data);
+}
+
