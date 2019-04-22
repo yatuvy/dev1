@@ -7,13 +7,12 @@ var router = require('express').Router();
 module.exports = router;
 
 var validationHelper = require('./validationHelper');
-var management = require('./management');
 var dbHelper = process.dbHelper;// Util for DB operations
 var dateFormat = require('dateformat');
 
 router.post('/userstartflow', validationHelper.validateSession, function (req, res){
   var tagJson = {msg : 'User Start Flow', colors : ['green', 'inverse']};
-  var currentFlow = management.getUserCurrentFlow(req);
+  var currentFlow = req.session.userCurrentFlow;
   if (currentFlow == null){
     logger(tagJson).warning("Missing Current Flow");
     res.json({Error: "Missing Current Flow"});

@@ -5,7 +5,6 @@ logger(tagJson).log("documents.js Start Up");
 
 var dbHelper = process.dbHelper;// Util for DB operations
 var validationHelper = require('./validationHelper');
-var management = require('./management');
 var json2md = require("json2md");
 
 var router = require('express').Router();
@@ -14,7 +13,7 @@ module.exports = router;
 router.post('/generatedocumentmarkdown', validationHelper.validateSession, function (req, res) {
   tagJson = {msg : 'Generate Document Markdown', colors : ['green', 'inverse']}; //var user = req.session.user;
   var data = req.body;
-  var currentFlow = management.getUserCurrentFlow(req);
+  var currentFlow = req.session.userCurrentFlow;
   logger(tagJson).log("Data: " + JSON.stringify(data) + "\tcurrentFlow: " + JSON.stringify(currentFlow));
 
   var operationsHelper = dbHelper.dbOperationsHelper(res, tagJson);

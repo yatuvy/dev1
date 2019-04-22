@@ -15,7 +15,7 @@ var router = express.Router();
 	In this case, ‘/’ represents the root of the site or the home page.
 	The second argument is the route handler. */
 router.get('/', function(req, res, next) {
-  // Render the index view, which is defined in views > index.jade
+  // Render the index view, which is defined in views > index.pug
   res.render('index', { title: 'Express' });
 });
 

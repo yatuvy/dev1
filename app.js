@@ -62,7 +62,7 @@ function initiateApp(app){
   // view engine setup
   var path = require('path');
   app.set('views', path.join(__dirname, 'views'));
-  app.set('view engine', 'jade');
+  app.set('view engine', 'pug');
 
   var bodyParser = require('body-parser');
   app.use(bodyParser.json());
